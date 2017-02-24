@@ -1,15 +1,27 @@
-# Scala enhanced rational numbers
-With great kickoff from 
-[Programming in Scala](https://www.amazon.com/Programming-Scala-Updated-2-12/dp/0981531687) 
+---
+layout: post
+title: "Scala enhanced rational numbers"
+description: "With great kickoff from
+[Programming in Scala](https://www.amazon.com/Programming-Scala-Updated-2-12/dp/0981531687)
+about [rationals]
+(http://booksites.artima.com/programming_in_scala/examples/html/ch06.html)
+I`m really interested if it is possible improve given Scala solution.
+And may we hope for similar elegance inside Java version for this code?"
+og_image: "documentation/sample-image.jpg"
+tags: [scala]
+---
+
+With great kickoff from
+[Programming in Scala](https://www.amazon.com/Programming-Scala-Updated-2-12/dp/0981531687)
 about [rationals](http://booksites.artima.com/programming_in_scala/examples/html/ch06.html)
-I`m really interested if it is possible improve given Scala solution. And 
+I`m really interested if it is possible improve given Scala solution. And
 is it possible to find similar elegance inside Java version for this code?
 
 ## Default details - unchanged
-A lot of stuff remaining from canonical 
-[implementation](http://booksites.artima.com/programming_in_scala/examples/html/ch06.html). 
-It contains regular arithmetic operations ``+, -, /, *``. 
-Solution also has unary ``-`` and ``min/max`` functions to enable simple selections. 
+A lot of stuff remaining from canonical
+[implementation](http://booksites.artima.com/programming_in_scala/examples/html/ch06.html).
+It contains regular arithmetic operations ``+, -, /, *``.
+Solution also has unary ``-`` and ``min/max`` functions to enable simple selections.
 Validation implemented by common ``Predef.require`` call as well.
 
 ## *equals* and *toString* overridden
@@ -18,8 +30,8 @@ Formatted ``toString`` looks a bit shorter than direct concatenation and served 
   override def toString: String = s"$n/$d"
 ```
 
-And ``equals`` code simple now as 1-2-3. 
-At the same time it keeps contract with comparison against ``null``s and wrong class instances. 
+And ``equals`` code simple now as 1-2-3.
+At the same time it keeps contract with comparison against ``null``s and wrong class instances.
 ```scala
   override def equals(obj: scala.Any): Boolean = obj match {
     case o: Rational => this - o match { case Rational(on, _) => on == 0 }
@@ -34,10 +46,10 @@ Now ``Rational`` assertions concise and does not require ``toString`` usage:
 ```
 
 ## Compare rationals against each other
-Arithmetic operations just implemented as defined into original, nothing interesting there. 
-Here is the link to the [Rational.scala](../src/main/scala/org/bearmug/rationals/Rational.scala) source to review. 
+Arithmetic operations just implemented as defined into original, nothing interesting there.
+Here is the link to the [Rational.scala](../src/main/scala/org/bearmug/rationals/Rational.scala) source to review.
 
-What is really exciting is rationals comparison operations. 
+What is really exciting is rationals comparison operations.
 Those ones could be clean and self-explanatory:
 ```scala
   def >(o: Rational): Boolean = this - o match { case Rational(in, _) => in > 0 }
@@ -58,7 +70,7 @@ And then just define single abstract method from ``Ordered``:
     this.n * that.d - that.n * this.d
     // Ordering.Int.compare((this - that).n, 0) // or this way, outcome is the same
 ```
-All the boilerplate code for comparisons could be purged from project now. 
+All the boilerplate code for comparisons could be purged from project now.
 
 ### Rationals comparison enhancement #2
 Moreover, it is possible to extend this trait for ``min/max``:
@@ -73,9 +85,9 @@ But the great plus is that ``Rational`` class now have 6 methods almost for free
 All we need is just implement ``compare`` one-liner!
 
 ## Rationals construction
-As a very first step, [GCD](https://en.wikipedia.org/wiki/Greatest_common_divisor) moved to companion object. 
-Our rational numbers have to be simplified with GCD, but if we`ll do this inside ``Rational`` 
-class construction, there is a chance that we will use initial (before ``GCD`` ) values for subsequent calculations. 
+As a very first step, [GCD](https://en.wikipedia.org/wiki/Greatest_common_divisor) moved to companion object.
+Our rational numbers have to be simplified with GCD, but if we`ll do this inside ``Rational``
+class construction, there is a chance that we will use initial (before ``GCD`` ) values for subsequent calculations.
 Then it may looks like:
 ```scala
 class SampleThing(p: Int) {
@@ -93,7 +105,7 @@ class Rational private(val n: Int, val d: Int) { ... }
 ```scala
   cal r = Rational(1, 33) // create Rational over companion object 'apply' calll
 ```
-- Two overloaded ``apply`` methods using initial one with subsequent ``GCD`` call. 
+- Two overloaded ``apply`` methods using initial one with subsequent ``GCD`` call.
 It looks just perfect:
 ```scala
   def apply(n: Int): Rational = Rational(n, 1)
@@ -103,7 +115,7 @@ It looks just perfect:
 From now ``Rational`` implementation internally restricted to use non-normalized values for ``number/denominator`` pair.
 On another end, ``Rational`` API users may feel safer, since there are less chances to hit wrong call.
 Profit!!!
- 
+
 ## Rational numbers implicit conversions
 Rationals syntax really great:
 ```scala
@@ -121,7 +133,7 @@ object RationalConversions {
 }
 ```
 
-...And import it inside client code to comply with conversions awareness rule. 
+...And import it inside client code to comply with conversions awareness rule.
 Now it is possible to calc expressions with ``Rational`` directly using ``Int`` and ``(Int, Int)`` :
 ```scala
 import RationalConversions._ // import at the same package level
@@ -135,4 +147,4 @@ val im = (2, 3) * (1, 22) + (1, 2) / (1, 6)
 
 ## Compare with Java
 Java class with similar functional implemented and tested [here](../src/main/java/org/bearmug/rationals/RationalJ.java)
-Easy to see that Java code much more verbose, has no features with implicit conversions and operators overloading. 
+Easy to see that Java code much more verbose, has no features with implicit conversions and operators overloading.
