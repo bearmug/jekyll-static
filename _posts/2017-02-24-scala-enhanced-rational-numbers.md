@@ -1,12 +1,8 @@
 ---
 layout: post
 title: "Scala enhanced rational numbers"
-description: "With great kickoff from
-[Programming in Scala](https://www.amazon.com/Programming-Scala-Updated-2-12/dp/0981531687)
-about [rationals]
-(http://booksites.artima.com/programming_in_scala/examples/html/ch06.html)
-I`m really interested if it is possible improve given Scala solution.
-And may we hope for similar elegance inside Java version for this code?"
+description: "Trying to improve Rationals problem solution. See into available
+code enhancements to make it concise and clean."
 og_image: "documentation/sample-image.jpg"
 tags: [scala]
 ---
@@ -47,7 +43,7 @@ Now ``Rational`` assertions concise and does not require ``toString`` usage:
 
 ## Compare rationals against each other
 Arithmetic operations just implemented as defined into original, nothing interesting there.
-Here is the link to the [Rational.scala](../src/main/scala/org/bearmug/rationals/Rational.scala) source to review.
+Here is the link to the [Rational.scala](https://github.com/bearmug/functional-sandbox/blob/master/src/main/scala/org/bearmug/rationals/Rational.scala) source to review.
 
 What is really exciting is rationals comparison operations.
 Those ones could be clean and self-explanatory:
@@ -86,7 +82,7 @@ All we need is just implement ``compare`` one-liner!
 
 ## Rationals construction
 As a very first step, [GCD](https://en.wikipedia.org/wiki/Greatest_common_divisor) moved to companion object.
-Our rational numbers have to be simplified with GCD, but if we`ll do this inside ``Rational``
+Our rational numbers have to be simplified with GCD, but if we'll do this inside ``Rational``
 class construction, there is a chance that we will use initial (before ``GCD`` ) values for subsequent calculations.
 Then it may looks like:
 ```scala
@@ -146,5 +142,5 @@ val im = (2, 3) * (1, 22) + (1, 2) / (1, 6)
 ```
 
 ## Compare with Java
-Java class with similar functional implemented and tested [here](../src/main/java/org/bearmug/rationals/RationalJ.java)
+Java class with similar functional implemented and tested [here](https://github.com/bearmug/functional-sandbox/blob/master/src/main/java/org/bearmug/rationals/RationalJ.java)
 Easy to see that Java code much more verbose, has no features with implicit conversions and operators overloading.
